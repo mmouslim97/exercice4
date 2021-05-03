@@ -1,0 +1,2 @@
+CREATE USER mouslim;
+ALTER USER mouslim WITH SUPERUSER;
