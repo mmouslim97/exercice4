@@ -1,6 +1,6 @@
 # Dockerfile
 # gets the docker parent image
-FROM ruby:2.6.5-alpine
+FROM ruby:2.5.5-alpine
 
 ENV BUNDLER_VERSION=2.0.2
 
@@ -32,20 +32,10 @@ RUN apk add --update --no-cache \
 
 RUN gem install bundler -v 2.0.2
 
-WORKDIR /app
+RUN mkdir -p /var/app
+COPY . /var/app
+WORKDIR /var/app
 
-COPY Gemfile Gemfile.lock ./
+RUN bundle install
 
-RUN bundle config build.nokogiri --use-system-libraries
-
-RUN bundle check || bundle install
-
-COPY package.json yarn.lock ./
-
-RUN yarn install --check-files
-
-COPY . ./
-
-ENTRYPOINT ["./entrypoints/docker-entrypoint.sh"]
-
-
+CMD rails s -b 0.0.0.0
