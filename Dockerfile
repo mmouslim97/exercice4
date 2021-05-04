@@ -30,12 +30,15 @@ RUN apk add --update --no-cache \
       tzdata \
       yarn
 
+RUN gem update --system
 RUN gem install bundler -v 2.0.2
+RUN gem install rails
 
 RUN mkdir -p /var/app
-COPY . /var/app
+COPY rails-on-docker-compose /var/app
 WORKDIR /var/app
 
 RUN bundle install
 
-CMD rails s -b 0.0.0.0
+# CMD rails s -b 0.0.0.0
+CMD bundle exec rails s -p 3000 -b '0.0.0.0'
